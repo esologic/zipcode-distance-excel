@@ -3,7 +3,7 @@ This is a command line utility to automatically calculate the distance between t
 
 It was developed to help a colleague and is very application-specific.
 
-##Prerequisites
+## Prerequisites
 Downloading is easy git, which is already on most systems, on ubuntu use:
  
 ```
