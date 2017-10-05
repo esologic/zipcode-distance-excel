@@ -17,7 +17,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/pypa/sampleproject',
+    url='https://github.com/esologic/zipcode-distance-excel',
 
     # Author details
     author='Devon Bray',

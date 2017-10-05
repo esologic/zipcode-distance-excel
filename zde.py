@@ -38,7 +38,7 @@ if __name__ == "__main__":
     for file_number, file_name in enumerate(xl_files_in_dir):
         print("[" + str(file_number) + "] - ", file_name)
 
-    file_number_string = input("File Number: ")
+    file_number_string = input("File Number: ").rstrip()
 
     file_number = None
 
@@ -62,25 +62,56 @@ if __name__ == "__main__":
     print("Which sheet would you like to modify?")
 
     for sheet_number, sheet_name in enumerate(wb.sheetnames):
-        print("[" + str(file_number) + "] - ", sheet_name)
+        print("[" + str(sheet_number) + "] - ", sheet_name)
 
-    sheet_name = 0
-    zip_column = 'I'
-    target_column = 'J'
+    sheet_number_string = input("Sheet Number: ").rstrip()
 
+    sheet_number = None
 
-    ws = wb[sheet_name]
+    try:
+        sheet_number = int(sheet_number_string)
+    except ValueError:
+        print("[" + str(sheet_number_string) + "]", "Isn't a number. Exiting.")
+        exit(0)
+
+    selected_sheet_name = None
+
+    try:
+        selected_sheet_name = wb.sheetnames[sheet_number]
+    except IndexError:
+        print("[" + str(file_number) + "]", "Doesn't correspond with a listed sheet number. Exiting.")
+
+    print("You've selected [" + str(selected_sheet_name) + "]", "to edit.")
+
+    read_col = input("Which column to read? (ie. A, B, AA): ").rstrip()
+    write_col = input("Which column to write result? (ie. A, B, AA): ").rstrip()
 
     zipcode_database = ZipCodeDatabase()
-    mgh_zip = '02114'
-    mgh = zipcode_database[mgh_zip]
-    mgh_coords = (mgh.latitude, mgh.longitude)
 
-    for row in ws.iter_rows(min_row=1):
+    input_zip = input("Point A Zipcode? ").rstrip()
+
+    a_zipcode = None
+
+    try:
+        a_zipcode = zipcode_database[input_zip]
+
+    except IndexError as e:
+        print("Couldn't find A zipcode:",
+              str(input_zip),
+              "in Database. Exiting.")
+        exit(0)
+
+    a_coords = (a_zipcode.latitude, a_zipcode.longitude)
+
+    ws = wb[selected_sheet_name]
+
+    modification_count = 0
+
+    for row in ws.iter_rows(min_row=2):
 
         for cell in row:
 
-                if cell.column == zip_column:
+                if cell.column == read_col:
 
                     if cell.value is not None:
 
@@ -89,7 +120,7 @@ if __name__ == "__main__":
                         try:
                             zipcode = zipcode_database[lookup_zip]
 
-                            distance = vincenty(mgh_coords, (zipcode.latitude, zipcode.longitude)).miles
+                            distance = vincenty(a_coords, (zipcode.latitude, zipcode.longitude)).miles
 
                             insertion_text = distance
 
@@ -101,11 +132,16 @@ if __name__ == "__main__":
 
                             insertion_text = "?"
 
-                        target_column_index = col2num(target_column)
+                        target_column_index = col2num(write_col)
                         write_cell = ws.cell(row=cell.row, column=target_column_index)
                         write_cell.value = insertion_text
-
-    wb.save(selected_file_name)
+                        modification_count += 1
+    try:
+        wb.save(selected_file_name)
+        print("Job Complete. " + str(modification_count) + " modifications made.")
+    except PermissionError as e:
+        print("The file [selected_file_name] is already open. Exiting.")
+        exit(0)
 
 
 
