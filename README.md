@@ -64,6 +64,7 @@ Job Complete. 10 modifications made.
 ```
 
 After:
+
 ![After](https://user-images.githubusercontent.com/3516293/31227930-9eaf3946-a9a9-11e7-9384-d096fdfbc073.PNG)
 
 ## Authors
