@@ -43,6 +43,8 @@ Before:
 
 ![Before](https://user-images.githubusercontent.com/3516293/31227931-9ec99c96-a9a9-11e7-8d2d-e3c441878e83.PNG)
 
+Terminal output:
+
 ```
 Which file would you like to modify?
 [0] -  International Addresses.xlsx
