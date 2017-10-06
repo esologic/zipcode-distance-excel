@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='sample',
+    name='zipcode-distance-excel',
 
     version='1.0.0',
 
